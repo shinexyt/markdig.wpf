@@ -181,7 +181,7 @@ namespace Markdig.Renderers
             ObjectRenderers.Add(new TableRenderer());
             ObjectRenderers.Add(new TaskListRenderer());
             ObjectRenderers.Add(new MathBlockRenderer());
-            ObjectRenderers.Add(new Inlines.MathInlineRenderer());
+            ObjectRenderers.Add(new Markdig.Renderers.Wpf.Inlines.MathInlineRenderer());
         }
 
         private static void AddInline(IAddChild parent, Inline inline)

@@ -51,7 +51,7 @@ namespace Markdig.Renderers
             ObjectRenderers.Add(new HtmlEntityInlineRenderer());
             ObjectRenderers.Add(new LinkInlineRenderer());
             ObjectRenderers.Add(new LiteralInlineRenderer());
-            ObjectRenderers.Add(new Inlines.MathInlineRenderer());
+            ObjectRenderers.Add(new MathInlineRenderer());
 
             EnableHtmlEscape = true;
         }
