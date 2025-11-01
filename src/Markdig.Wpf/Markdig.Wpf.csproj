@@ -6,7 +6,7 @@
 		<AssemblyName>Markdig.Wpf</AssemblyName>
 		<AssemblyTitle>Markdig.Wpf</AssemblyTitle>
 		<NeutralLanguage>en-US</NeutralLanguage>
-		<VersionPrefix>0.43.0</VersionPrefix>
+		<VersionPrefix>0.43.1</VersionPrefix>
 		<TargetFrameworks>net462;net8.0-windows</TargetFrameworks>
 		<SignAssembly Condition="'$(Configuration)' == 'Release_Signed'">true</SignAssembly>
 		<PackageId>Shinexyt.Markdig.Wpf</PackageId>
