@@ -74,7 +74,6 @@ $\invalid{syntax}$
 
 The math rendering is implemented using:
 - **WpfMath.Controls.FormulaControl** for direct visual rendering
-- **Conditional compilation** with `USE_WPFMATH` define for all target frameworks
 - **Error handling** to gracefully handle invalid LaTeX expressions
 - **Configurable scaling** for inline (20.0) and block (25.0) math displays
 

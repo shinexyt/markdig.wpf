@@ -22,7 +22,6 @@ namespace Markdig.Renderers.Wpf.Inlines
             if (renderer == null) throw new ArgumentNullException(nameof(renderer));
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-#if USE_WPFMATH
             try
             {
                 var latex = obj.Content.ToString();
@@ -33,7 +32,7 @@ namespace Markdig.Renderers.Wpf.Inlines
                     Scale = 20.0,
                     SystemTextFontName = "Segoe UI"
                 };
-                
+
                 renderer.WriteInline(new InlineUIContainer(control));
             }
             catch
@@ -46,12 +45,6 @@ namespace Markdig.Renderers.Wpf.Inlines
                 run.SetResourceReference(FrameworkContentElement.StyleProperty, Styles.CodeStyleKey);
                 renderer.WriteInline(run);
             }
-#else
-            // Fallback for .NET Framework 4.6.2 without WPF-Math
-            var run = new Run($"${obj.Content.ToString()}$");
-            run.SetResourceReference(FrameworkContentElement.StyleProperty, Styles.CodeStyleKey);
-            renderer.WriteInline(run);
-#endif
         }
     }
 }

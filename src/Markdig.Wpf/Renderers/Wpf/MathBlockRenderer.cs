@@ -24,7 +24,6 @@ namespace Markdig.Renderers.Wpf
             if (renderer == null) throw new ArgumentNullException(nameof(renderer));
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-#if USE_WPFMATH
             try
             {
                 // Extract LaTeX content from the block
@@ -73,14 +72,6 @@ namespace Markdig.Renderers.Wpf
                 renderer.WriteLeafRawLines(obj);
                 renderer.Pop();
             }
-#else
-            // Fallback for .NET Framework 4.6.2 without WPF-Math
-            var paragraph = new Paragraph();
-            paragraph.SetResourceReference(FrameworkContentElement.StyleProperty, Styles.CodeBlockStyleKey);
-            renderer.Push(paragraph);
-            renderer.WriteLeafRawLines(obj);
-            renderer.Pop();
-#endif
         }
     }
 }

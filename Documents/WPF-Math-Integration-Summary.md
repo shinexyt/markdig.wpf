@@ -7,9 +7,7 @@ Successfully integrated WPF-Math library into Markdig.Wpf to provide professiona
 
 ### 1. Package Dependencies
 **File**: `Markdig.Wpf\Markdig.Wpf.csproj`
-- Added WPF-Math 2.1.0 package reference (conditional for .NET Core 3.1+ and .NET 5.0+)
-- Added `USE_WPFMATH` compilation symbol for frameworks supporting WPF-Math
-- Excluded .NET Framework 4.5.2 from WPF-Math support due to compatibility requirements
+- Added WPF-Math 2.1.0 package reference
 
 ### 2. Math Renderers Updated
 
@@ -112,14 +110,6 @@ Changes:
 - Block math: Embedded in `BlockUIContainer` with centering
 - Font: Segoe UI (configurable)
 
-### Conditional Compilation
-```csharp
-#if USE_WPFMATH
-    // WPF-Math visual rendering
-#else
-    // Text-based fallback
-#endif
-```
 
 ## Known Limitations
 

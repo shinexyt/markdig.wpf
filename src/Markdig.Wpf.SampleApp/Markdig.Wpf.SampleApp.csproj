@@ -17,9 +17,6 @@
     <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants>$(DefineConstants);USE_WPFMATH</DefineConstants>
-  </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
     <Compile Update="Properties\Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
@@ -53,8 +50,5 @@
     <Content Include="..\..\Documents\Math-Demo.md" Link="Documents\Math-Demo.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 </Content>
-    <Content Include="..\..\Documents\Simple-Math-Test.md" Link="Documents\Simple-Math-Test.md">
-<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 </Project>
