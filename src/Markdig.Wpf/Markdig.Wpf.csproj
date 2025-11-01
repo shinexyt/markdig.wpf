@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<Authors>shinexyt</Authors>
-		<Copyright>Copyright © shinexyt 2016-2021</Copyright>
+		<Copyright>Copyright © shinexyt 2025</Copyright>
 		<Description>A WPF library for xoofx/markdig</Description>
 		<AssemblyName>Markdig.Wpf</AssemblyName>
 		<AssemblyTitle>Markdig.Wpf</AssemblyTitle>
@@ -9,8 +9,8 @@
 		<VersionPrefix>0.43.0</VersionPrefix>
 		<TargetFrameworks>net462;net8.0-windows</TargetFrameworks>
 		<SignAssembly Condition="'$(Configuration)' == 'Release_Signed'">true</SignAssembly>
-		<PackageId>Markdig.Wpf</PackageId>
-		<PackageId Condition="'$(SignAssembly)' == 'true'">Markdig.Wpf.Signed</PackageId>
+		<PackageId>Shinexyt.Markdig.Wpf</PackageId>
+		<PackageId Condition="'$(SignAssembly)' == 'true'">Shinexyt.Markdig.Wpf.Signed</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/shinexyt/markdig.wpf</PackageProjectUrl>
 		<PackageReleaseNotes>https://github.com/shinexyt/markdig.wpf/blob/main/RELEASENOTES.md</PackageReleaseNotes>
