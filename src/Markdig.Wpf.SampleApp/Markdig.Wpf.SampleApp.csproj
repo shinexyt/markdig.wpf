@@ -17,7 +17,7 @@
     <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)' != 'net462'">
+  <PropertyGroup>
     <DefineConstants>$(DefineConstants);USE_WPFMATH</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
@@ -34,8 +34,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' != 'net462'">
     <PackageReference Include="WpfMath" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
@@ -46,7 +44,7 @@
     <Folder Include="img\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Documents\img\BenchmarkCPU.png" Link="img\BenchmarkCPU.png">
+  <Content Include="..\..\Documents\img\BenchmarkCPU.png" Link="img\BenchmarkCPU.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\Documents\Markdig-readme.md" Link="Documents\Markdig-readme.md">
@@ -54,9 +52,9 @@
     </Content>
     <Content Include="..\..\Documents\Math-Demo.md" Link="Documents\Math-Demo.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+</Content>
     <Content Include="..\..\Documents\Simple-Math-Test.md" Link="Documents\Simple-Math-Test.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+<CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 </Project>

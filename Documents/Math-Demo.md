@@ -1,4 +1,4 @@
-# Math/LaTeX Support Demo
+﻿# Math/LaTeX Support Demo
 
 This document demonstrates the Math/LaTeX extension support in Markdig.Wpf with **WPF-Math visual rendering**.
 
@@ -7,9 +7,8 @@ This document demonstrates the Math/LaTeX extension support in Markdig.Wpf with 
 This implementation uses [WPF-Math](https://github.com/ForNeVeR/wpf-math) library to provide professional-quality mathematical typesetting directly in WPF applications. Math expressions are rendered as visual elements rather than plain text.
 
 **Supported Targets:**
-- ? .NET Core 3.1 and later - Full WPF-Math visual rendering
-- ? .NET 5.0+ - Full WPF-Math visual rendering  
-- ?? .NET Framework 4.5.2 - Text-based rendering (WPF-Math not compatible)
+- ✅ **.NET Framework 4.6.2+** 
+- ✅ **.NET 8.0**
 
 ## Inline Math
 
@@ -75,7 +74,7 @@ $\invalid{syntax}$
 
 The math rendering is implemented using:
 - **WpfMath.Controls.FormulaControl** for direct visual rendering
-- **Conditional compilation** to support both WPF-Math enabled and fallback scenarios
+- **Conditional compilation** with `USE_WPFMATH` define for all target frameworks
 - **Error handling** to gracefully handle invalid LaTeX expressions
 - **Configurable scaling** for inline (20.0) and block (25.0) math displays
 
@@ -85,3 +84,4 @@ The math rendering is implemented using:
 2. **Block Math**: Rendered using `BlockUIContainer` with centered `FormulaControl`
 3. **Fallback**: Invalid expressions render as styled text with error indication
 4. **Performance**: Math expressions are rendered on-demand during document processing
+5. **Cross-Framework**: Works identically on .NET Framework 4.6.2 and .NET 8.0
