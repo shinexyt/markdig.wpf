@@ -39,6 +39,7 @@ namespace Markdig.Renderers
             ObjectRenderers.Add(new ParagraphRenderer());
             ObjectRenderers.Add(new QuoteBlockRenderer());
             ObjectRenderers.Add(new ThematicBreakRenderer());
+            ObjectRenderers.Add(new MathBlockRenderer());
 
             // Default inline renderers
             ObjectRenderers.Add(new AutolinkInlineRenderer());
@@ -50,6 +51,7 @@ namespace Markdig.Renderers
             ObjectRenderers.Add(new HtmlEntityInlineRenderer());
             ObjectRenderers.Add(new LinkInlineRenderer());
             ObjectRenderers.Add(new LiteralInlineRenderer());
+            ObjectRenderers.Add(new Inlines.MathInlineRenderer());
 
             EnableHtmlEscape = true;
         }

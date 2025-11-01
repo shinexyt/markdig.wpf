@@ -26,3 +26,25 @@ Additionally, the following extensions are supported:
 - **Task lists** (WPF renderer only)
 - **Tables** (partial support of grid and pipe tables) (WPF renderer only)
 - **Extra emphasis**
+- **Mathematics/LaTeX** (inline `$...$` and block `$$...$$` expressions)
+
+### Mathematics/LaTeX Support
+
+The Math extension allows you to render LaTeX mathematical expressions in your WPF applications:
+
+- **Inline math**: Use single dollar signs `$...$` for inline expressions like `$E = mc^2$`
+- **Block math**: Use double dollar signs `$$...$$` for display expressions on their own lines
+
+**Example:**
+```markdown
+The quadratic formula is $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$.
+
+Block math:
+$$
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+$$
+```
+
+**Note:** The current implementation renders LaTeX expressions as styled text (similar to code blocks). For actual visual mathematical rendering, integrate libraries like [WPF-Math](https://github.com/ForNeVeR/wpf-math) or use external rendering solutions.
+
+See [Math-Demo.md](Documents/Math-Demo.md) for more examples.

@@ -180,6 +180,8 @@ namespace Markdig.Renderers
             // Extension renderers
             ObjectRenderers.Add(new TableRenderer());
             ObjectRenderers.Add(new TaskListRenderer());
+            ObjectRenderers.Add(new MathBlockRenderer());
+            ObjectRenderers.Add(new Inlines.MathInlineRenderer());
         }
 
         private static void AddInline(IAddChild parent, Inline inline)
