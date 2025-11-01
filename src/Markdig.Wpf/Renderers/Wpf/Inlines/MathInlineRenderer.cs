@@ -1,4 +1,4 @@
-// Copyright (c) Nicolas Musset. All rights reserved.
+// Copyright (c) shinexyt All rights reserved.
 // This file is licensed under the MIT license. 
 // See the LICENSE.md file in the project root for more information.
 
