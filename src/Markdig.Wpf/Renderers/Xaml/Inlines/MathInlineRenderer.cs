@@ -18,9 +18,11 @@ namespace Markdig.Renderers.Xaml.Inlines
             if (renderer == null) throw new ArgumentNullException(nameof(renderer));
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-            renderer.Write("<Run Style=\"{StaticResource {x:Static markdig:Styles.CodeStyleKey}}\">");
-            renderer.WriteEscape(ref obj.Content);
-            renderer.Write("</Run>");
+            renderer.Write("<Run");
+            // Apply code styling for math expressions
+            renderer.Write(" Style=\"{StaticResource {x:Static markdig:Styles.CodeStyleKey}}\"");
+            renderer.Write(" Text=\"").WriteEscape(ref obj.Content).Write("\"");
+            renderer.Write(" />");
         }
     }
 }

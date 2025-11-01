@@ -18,8 +18,13 @@ namespace Markdig.Renderers.Xaml
             if (renderer == null) throw new ArgumentNullException(nameof(renderer));
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-            renderer.Write("<Paragraph Style=\"{StaticResource {x:Static markdig:Styles.CodeBlockStyleKey}}\">");
-            renderer.WriteLeafRawLines(obj, false, true);
+            renderer.EnsureLine();
+
+            renderer.Write("<Paragraph xml:space=\"preserve\"");
+            // Apply code block styling for math blocks
+            renderer.Write(" Style=\"{StaticResource {x:Static markdig:Styles.CodeBlockStyleKey}}\"");
+            renderer.WriteLine(">");
+            renderer.WriteLeafRawLines(obj, true, true);
             renderer.WriteLine("</Paragraph>");
         }
     }
