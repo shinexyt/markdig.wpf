@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29424.173
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Markdig.Wpf", "Markdig.Wpf\Markdig.Wpf.csproj", "{01E40FB5-B4E9-489D-98D5-4771DDC2D1D7}"
 EndProject
@@ -19,6 +19,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{8DA306DF-1D05-4E0D-85E8-C966154D6FCD}"
 	ProjectSection(SolutionItems) = preProject
 		..\Documents\Markdig-readme.md = ..\Documents\Markdig-readme.md
+		..\Documents\Math-Demo.md = ..\Documents\Math-Demo.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{E93FC46F-EBFB-4177-9D86-7534C4619827}"

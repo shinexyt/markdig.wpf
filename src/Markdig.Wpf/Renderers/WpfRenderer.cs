@@ -159,6 +159,11 @@ namespace Markdig.Renderers
         /// </summary>
         protected virtual void LoadRenderers()
         {
+            // Extension renderers for specialized blocks (must come before generic block renderers)
+            ObjectRenderers.Add(new MathBlockRenderer());
+            ObjectRenderers.Add(new TableRenderer());
+            ObjectRenderers.Add(new TaskListRenderer());
+
             // Default block renderers
             ObjectRenderers.Add(new CodeBlockRenderer());
             ObjectRenderers.Add(new ListRenderer());
@@ -177,10 +182,7 @@ namespace Markdig.Renderers
             ObjectRenderers.Add(new LinkInlineRenderer());
             ObjectRenderers.Add(new LiteralInlineRenderer());
 
-            // Extension renderers
-            ObjectRenderers.Add(new TableRenderer());
-            ObjectRenderers.Add(new TaskListRenderer());
-            ObjectRenderers.Add(new MathBlockRenderer());
+            // Extension inline renderers
             ObjectRenderers.Add(new Markdig.Renderers.Wpf.Inlines.MathInlineRenderer());
         }
 

@@ -17,9 +17,8 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
-          5.0.x
-          3.1.x
-          
+          8.0.x
+       
     - name: Restore dependencies
       run: dotnet restore src/Markdig.Wpf.sln
       
@@ -30,7 +29,12 @@ jobs:
       run: dotnet pack src/Markdig.Wpf/Markdig.Wpf.csproj --configuration Release --no-build --output ./nupkgs
       
     - name: Push to NuGet
-      run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      shell: pwsh
+      run: |
+        $packages = Get-ChildItem -Path ./nupkgs -Filter *.nupkg -Exclude *.snupkg
+        foreach ($package in $packages) {
+          dotnet nuget push $package.FullName --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        }
       
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
