@@ -19,7 +19,7 @@ namespace Markdig.Wpf.SampleApp
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            Viewer.Markdown = File.ReadAllText("Documents/Markdig-readme.md");
+            LoadDocument("Documents/Markdig-readme.md");
         }
 
         private void OpenHyperlink(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
@@ -38,6 +38,26 @@ namespace Markdig.Wpf.SampleApp
             Viewer.Pipeline = useExtensions ? new MarkdownPipelineBuilder().UseSupportedExtensions().Build() : new MarkdownPipelineBuilder().Build();
         }
 
+        private void LoadMathDemoButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            LoadDocument("Documents/Math-Demo.md");
+        }
 
+        private void LoadReadmeButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            LoadDocument("Documents/Markdig-readme.md");
+        }
+
+        private void LoadDocument(string path)
+        {
+            if (File.Exists(path))
+            {
+                Viewer.Markdown = File.ReadAllText(path);
+            }
+            else
+            {
+                Viewer.Markdown = $"# Error\n\nDocument not found: {path}";
+            }
+        }
     }
 }

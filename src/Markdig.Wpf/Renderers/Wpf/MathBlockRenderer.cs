@@ -1,10 +1,13 @@
 // Copyright (c) Nicolas Musset. All rights reserved.
-// This file is licensed under the MIT license. 
+// This file is licensed under the MIT license.
 // See the LICENSE.md file in the project root for more information.
 
 using System;
+using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 using Markdig.Extensions.Mathematics;
 using Markdig.Wpf;
 
@@ -21,11 +24,63 @@ namespace Markdig.Renderers.Wpf
             if (renderer == null) throw new ArgumentNullException(nameof(renderer));
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
+#if USE_WPFMATH
+            try
+            {
+                // Extract LaTeX content from the block
+                var latexBuilder = new StringBuilder();
+                if (obj.Lines.Lines != null)
+                {
+                    var lines = obj.Lines;
+                    var slices = lines.Lines;
+                    for (var i = 0; i < lines.Count; i++)
+                    {
+                        if (i > 0) latexBuilder.AppendLine();
+                        latexBuilder.Append(slices[i].Slice.ToString());
+                    }
+                }
+
+                var latex = latexBuilder.ToString().Trim();
+
+                var control = new WpfMath.Controls.FormulaControl
+                {
+                    Formula = latex,
+                    Scale = 25.0,
+                    SystemTextFontName = "Segoe UI",
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
+
+                var container = new BlockUIContainer(control)
+                {
+                    Margin = new Thickness(0, 10, 0, 10)
+                };
+                renderer.WriteBlock(container);
+            }
+            catch (Exception ex)
+            {
+                // Fallback to text rendering if LaTeX parsing fails
+                var paragraph = new Paragraph();
+                paragraph.SetResourceReference(FrameworkContentElement.StyleProperty, Styles.CodeBlockStyleKey);
+
+                var errorRun = new Run($"[Math Error: {ex.Message}]\n")
+                {
+                    Foreground = Brushes.DarkRed,
+                    FontWeight = FontWeights.Bold
+                };
+                paragraph.Inlines.Add(errorRun);
+
+                renderer.Push(paragraph);
+                renderer.WriteLeafRawLines(obj);
+                renderer.Pop();
+            }
+#else
+            // Fallback for .NET Framework 4.6.2 without WPF-Math
             var paragraph = new Paragraph();
             paragraph.SetResourceReference(FrameworkContentElement.StyleProperty, Styles.CodeBlockStyleKey);
             renderer.Push(paragraph);
             renderer.WriteLeafRawLines(obj);
             renderer.Pop();
+#endif
         }
     }
 }

@@ -5,14 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:markdig="clr-namespace:Markdig.Wpf;assembly=Markdig.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow">
+        Title="Markdig.Wpf Sample - Math Demo">
   <FrameworkElement.CommandBindings>
         <CommandBinding Command="{x:Static markdig:Commands.Hyperlink}" Executed="OpenHyperlink" />
         <CommandBinding Command="{x:Static markdig:Commands.Image}" Executed="ClickOnImage" />
     </FrameworkElement.CommandBindings>
   <DockPanel>
-    <Button x:Name="ToggleExtensionsButton" DockPanel.Dock="Top" HorizontalAlignment="Center"
-            Content="Toggle supported extensions" Click="ToggleExtensionsButton_OnClick" />
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+      <Button x:Name="ToggleExtensionsButton" 
+          Content="Toggle Extensions" 
+              Click="ToggleExtensionsButton_OnClick" 
+      Margin="5" Padding="10,5"/>
+  <Button x:Name="LoadMathDemoButton" 
+   Content="Load Math Demo" 
+           Click="LoadMathDemoButton_OnClick" 
+ Margin="5" Padding="10,5"/>
+      <Button x:Name="LoadReadmeButton" 
+         Content="Load README" 
+        Click="LoadReadmeButton_OnClick" 
+              Margin="5" Padding="10,5"/>
+    </StackPanel>
     <markdig:MarkdownViewer x:Name="Viewer"/>
   </DockPanel>
 </Window>

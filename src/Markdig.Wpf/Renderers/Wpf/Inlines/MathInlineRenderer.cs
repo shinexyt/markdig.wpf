@@ -5,6 +5,7 @@
 using System;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Media;
 using Markdig.Extensions.Mathematics;
 using Markdig.Wpf;
 
@@ -21,9 +22,36 @@ namespace Markdig.Renderers.Wpf.Inlines
             if (renderer == null) throw new ArgumentNullException(nameof(renderer));
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-            var run = new Run(obj.Content.ToString());
+#if USE_WPFMATH
+            try
+            {
+                var latex = obj.Content.ToString();
+
+                var control = new WpfMath.Controls.FormulaControl
+                {
+                    Formula = latex,
+                    Scale = 20.0,
+                    SystemTextFontName = "Segoe UI"
+                };
+                
+                renderer.WriteInline(new InlineUIContainer(control));
+            }
+            catch
+            {
+                // Fallback to text rendering if LaTeX parsing fails
+                var run = new Run($"${obj.Content.ToString()}$")
+                {
+                    Foreground = Brushes.DarkRed
+                };
+                run.SetResourceReference(FrameworkContentElement.StyleProperty, Styles.CodeStyleKey);
+                renderer.WriteInline(run);
+            }
+#else
+            // Fallback for .NET Framework 4.6.2 without WPF-Math
+            var run = new Run($"${obj.Content.ToString()}$");
             run.SetResourceReference(FrameworkContentElement.StyleProperty, Styles.CodeStyleKey);
             renderer.WriteInline(run);
+#endif
         }
     }
 }

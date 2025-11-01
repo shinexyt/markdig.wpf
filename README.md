@@ -26,11 +26,11 @@ Additionally, the following extensions are supported:
 - **Task lists** (WPF renderer only)
 - **Tables** (partial support of grid and pipe tables) (WPF renderer only)
 - **Extra emphasis**
-- **Mathematics/LaTeX** (inline `$...$` and block `$$...$$` expressions)
+- **Mathematics/LaTeX** (inline `$...$` and block `$$...$$` expressions with WPF-Math visual rendering)
 
 ### Mathematics/LaTeX Support
 
-The Math extension allows you to render LaTeX mathematical expressions in your WPF applications:
+The Math extension allows you to render LaTeX mathematical expressions in your WPF applications with **visual rendering powered by WPF-Math**:
 
 - **Inline math**: Use single dollar signs `$...$` for inline expressions like `$E = mc^2$`
 - **Block math**: Use double dollar signs `$$...$$` for display expressions on their own lines
@@ -45,6 +45,16 @@ $$
 $$
 ```
 
-**Note:** The current implementation renders LaTeX expressions as styled text (similar to code blocks). For actual visual mathematical rendering, integrate libraries like [WPF-Math](https://github.com/ForNeVeR/wpf-math) or use external rendering solutions.
+**Rendering Implementation:**
+- **For .NET Core 3.1 and .NET 5.0+**: Math expressions are rendered visually using the [WPF-Math](https://github.com/ForNeVeR/wpf-math) library (version 2.1.0), providing professional-quality mathematical typesetting
+- **For .NET Framework 4.5.2**: Math expressions are rendered as styled text (similar to code blocks) due to WPF-Math compatibility requirements
 
-See [Math-Demo.md](Documents/Math-Demo.md) for more examples.
+**Features:**
+- Supports a wide range of LaTeX mathematical symbols and expressions
+- Properly formatted fractions, integrals, summations, matrices, and more
+- Greek letters and mathematical operators
+- Error handling with fallback to text rendering for invalid LaTeX
+
+**Note:** If you encounter issues with specific LaTeX expressions, they will fall back to text rendering with error indication.
+
+See [Math-Demo.md](Documents/Math-Demo.md) for more examples and demonstrations.
