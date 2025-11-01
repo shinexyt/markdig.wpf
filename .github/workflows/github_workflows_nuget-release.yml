@@ -1,0 +1,41 @@
+name: Publish to NuGet
+
+on:
+  push:
+    tags:
+      - 'v*'  # 当推送 v* 标签时触发（例如 v0.6.0）
+
+jobs:
+  build-and-publish:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          5.0.x
+          3.1.x
+          
+    - name: Restore dependencies
+      run: dotnet restore src/Markdig.Wpf.sln
+      
+    - name: Build
+      run: dotnet build src/Markdig.Wpf.sln --configuration Release --no-restore
+      
+    - name: Pack
+      run: dotnet pack src/Markdig.Wpf/Markdig.Wpf.csproj --configuration Release --no-build --output ./nupkgs
+      
+    - name: Push to NuGet
+      run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: ./nupkgs/*.nupkg
+        generate_release_notes: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
