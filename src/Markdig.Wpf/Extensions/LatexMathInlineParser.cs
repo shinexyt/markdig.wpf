@@ -22,82 +22,83 @@ namespace Markdig.Wpf.Extensions
         public override bool Match(InlineProcessor processor, ref StringSlice slice)
         {
    // Check for \( or \[
-      if (slice.CurrentChar != '\\')
-    return false;
+            if (slice.CurrentChar != '\\')
+      return false;
 
-   var start = slice.Start;
-     var c = slice.NextChar();
-       
-   bool isBlock = false;
-char openChar, closeChar;
+ var start = slice.Start;
+            var c = slice.NextChar();
+      
+         bool isBlock = false;
+  char openChar, closeChar;
 
-if (c == '(')
-      {
-      openChar = '(';
-closeChar = ')';
-    isBlock = false;
+     if (c == '(')
+ {
+     openChar = '(';
+         closeChar = ')';
+       isBlock = false;
     }
-else if (c == '[')
+         else if (c == '[')
+    {
+          openChar = '[';
+       closeChar = ']';
+         isBlock = true;
+  }
+   else
+{
+                return false;
+            }
+
+   // Move past the opening \( or \[
+            slice.Start++;
+
+     // Content starts right after the opening delimiter
+    var contentStart = slice.Start;
+    var contentEnd = contentStart;
+  var foundEnd = false;
+
+         // Look for closing \) or \]
+            while (!slice.IsEmpty)
+            {
+   c = slice.CurrentChar;
+
+             if (c == '\\')
    {
-     openChar = '[';
-    closeChar = ']';
-       isBlock = true;
-         }
-    else
-           {
-    return false;
- }
-
-     // Move past the opening \( or \[
-   slice.Start++;
-
-     var contentStart = slice.Start + 1;
-       var contentEnd = contentStart;
-       var foundEnd = false;
-
-    // Look for closing \) or \]
-   while (!slice.IsEmpty)
-       {
-      c = slice.CurrentChar;
-
-    if (c == '\\')
-    {
-    var next = slice.PeekChar(1);
-    if (next == closeChar)
-    {
-          foundEnd = true;
-contentEnd = slice.Start - 1;
-        break;
+          var next = slice.PeekChar(1);
+         if (next == closeChar)
+   {
+           foundEnd = true;
+       contentEnd = slice.Start - 1;
+               break;
+   }
      }
-     }
-   
-   slice.NextChar();
-    }
+     
+     slice.NextChar();
+          }
 
- if (!foundEnd)
-     {
-    // Restore position if we didn't find the end
-          slice.Start = start;
-    return false;
- }
+      if (!foundEnd)
+    {
+      // Restore position if we didn't find the end
+        slice.Start = start;
+      return false;
+            }
 
-       // Move past the closing \) or \]
-      slice.Start += 2;
+         // Move past the closing \) or \]
+    slice.Start += 2;
 
-        // Extract the math content
-       var mathContent = new StringSlice(slice.Text, contentStart, contentEnd);
+            // Extract the math content
+    var mathContent = new StringSlice(slice.Text, contentStart, contentEnd);
 
-       // For now, treat both as inline
-   var mathInline = new MathInline
+        // Create MathInline object
+            var mathInline = new MathInline
         {
-   Span = new SourceSpan(start, slice.Start - 1),
-Delimiter = '$', // Use standard $ delimiter for compatibility with existing renderers
+         Span = new SourceSpan(start, slice.Start - 1),
+       Delimiter = '$', // Use standard $ delimiter for compatibility
      DelimiterCount = isBlock ? 2 : 1,
-      Content = mathContent
-  };
+        Content = mathContent
+            };
 
-       processor.Inline = mathInline;
-  return true;
-     }
+ processor.Inline = mathInline;
+       return true;
+        }
     }
 }

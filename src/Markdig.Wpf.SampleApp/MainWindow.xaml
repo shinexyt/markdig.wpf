@@ -28,6 +28,14 @@
          Content="Load README" 
         Click="LoadReadmeButton_OnClick" 
               Margin="5" Padding="10,5"/>
+    <Button x:Name="StreamingTestButton" 
+        Content="?? Streaming Test" 
+   Click="StreamingTestButton_OnClick" 
+              Margin="5" Padding="10,5"
+         Background="#FF6B35"
+       Foreground="White"
+  FontWeight="Bold"
+   ToolTip="Open streaming test window to verify LaTeX math rendering during real-time content streaming"/>
     </StackPanel>
     <markdig:MarkdownViewer x:Name="Viewer"/>
   </DockPanel>

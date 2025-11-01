@@ -19,32 +19,50 @@ namespace Markdig.Renderers.Wpf.Inlines
     {
         protected override void Write(WpfRenderer renderer, MathInline obj)
         {
-            if (renderer == null) throw new ArgumentNullException(nameof(renderer));
+      if (renderer == null) throw new ArgumentNullException(nameof(renderer));
             if (obj == null) throw new ArgumentNullException(nameof(obj));
 
-            try
+            var latex = obj.Content.ToString();
+      
+            // Early return for empty content
+         if (string.IsNullOrWhiteSpace(latex))
             {
-                var latex = obj.Content.ToString();
-
-                var control = new WpfMath.Controls.FormulaControl
-                {
-                    Formula = latex,
-                    Scale = 20.0,
-                    SystemTextFontName = "Segoe UI"
-                };
-
-                renderer.WriteInline(new InlineUIContainer(control));
+          WriteFallback(renderer, "$" + latex + "$");
+      return;
             }
-            catch
-            {
+
+ try
+   {
+     // Create the control - the Formula property setter will validate
+ // We catch any exceptions to prevent UI thread freezing during streaming
+  var control = new WpfMath.Controls.FormulaControl
+  {
+     Scale = 20.0,
+        SystemTextFontName = "Segoe UI"
+ };
+  
+   // Set the formula - this is where TexParseException can be thrown
+      control.Formula = latex;
+
+         renderer.WriteInline(new InlineUIContainer(control));
+         }
+  catch (Exception ex)
+      {
                 // Fallback to text rendering if LaTeX parsing fails
-                var run = new Run($"${obj.Content.ToString()}$")
-                {
-                    Foreground = Brushes.DarkRed
-                };
-                run.SetResourceReference(FrameworkContentElement.StyleProperty, Styles.CodeStyleKey);
-                renderer.WriteInline(run);
-            }
-        }
+       // This prevents application freeze when streaming invalid/partial LaTeX
+     System.Diagnostics.Debug.WriteLine($"Math rendering error: {ex.Message}");
+      WriteFallback(renderer, "$" + latex + "$");
+      }
+     }
+
+      private void WriteFallback(WpfRenderer renderer, string text)
+        {
+          var run = new Run(text)
+    {
+       Foreground = Brushes.DarkRed
+        };
+  run.SetResourceReference(FrameworkContentElement.StyleProperty, Styles.CodeStyleKey);
+            renderer.WriteInline(run);
+   }
     }
 }

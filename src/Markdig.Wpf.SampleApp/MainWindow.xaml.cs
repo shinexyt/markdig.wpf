@@ -53,6 +53,12 @@ namespace Markdig.Wpf.SampleApp
             LoadDocument("Documents/Markdig-readme.md");
         }
 
+        private void StreamingTestButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var streamingWindow = new StreamingTestWindow();
+            streamingWindow.Show();
+        }
+
         private void LoadDocument(string path)
         {
             if (File.Exists(path))
