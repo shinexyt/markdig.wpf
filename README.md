@@ -1,4 +1,4 @@
-# Markdig-WPF [![NuGet](https://img.shields.io/nuget/v/Markdig.Wpf.svg?logo=nuget)](https://www.nuget.org/packages/Markdig.wpf/) [![NuGet](https://img.shields.io/nuget/dt/Markdig.Wpf.svg)](https://www.nuget.org/stats/packages/Markdig.Wpf?groupby=Version)
+# Markdig-WPF [![NuGet](https://img.shields.io/nuget/v/Shinexyt.Markdig.Wpf.svg?logo=nuget)](https://www.nuget.org/packages/Shinexyt.Markdig.Wpf/)
 
 > **Note:** This repository is forked from [Kryptos-FR/markdig-wpf](https://github.com/Kryptos-FR/markdig-wpf)
 > 
