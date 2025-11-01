@@ -53,5 +53,8 @@
     <Content Include="..\..\Documents\LaTeX-Syntax-Test.md" Link="Documents\LaTeX-Syntax-Test.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\Documents\Taylor-Formula-Correct.md" Link="Documents\Taylor-Formula-Correct.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

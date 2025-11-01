@@ -41,6 +41,12 @@ namespace Markdig.Renderers.Wpf
 
                 var latex = latexBuilder.ToString().Trim();
 
+                // Skip empty formulas
+                if (string.IsNullOrWhiteSpace(latex))
+                {
+                    return;
+                }
+
                 var control = new WpfMath.Controls.FormulaControl
                 {
                     Formula = latex,
@@ -61,12 +67,31 @@ namespace Markdig.Renderers.Wpf
                 var paragraph = new Paragraph();
                 paragraph.SetResourceReference(FrameworkContentElement.StyleProperty, Styles.CodeBlockStyleKey);
 
-                var errorRun = new Run($"[Math Error: {ex.Message}]\n")
+                var errorRun = new Run($"[Math Rendering Error: {ex.Message}]\n")
                 {
                     Foreground = Brushes.DarkRed,
                     FontWeight = FontWeights.Bold
                 };
                 paragraph.Inlines.Add(errorRun);
+
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine($"Math block rendering error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+
+                // Extract and show the LaTeX content
+                var latexBuilder = new StringBuilder();
+                if (obj.Lines.Lines != null)
+                {
+                    var lines = obj.Lines;
+                    var slices = lines.Lines;
+                    for (var i = 0; i < lines.Count; i++)
+                    {
+                        if (i > 0) latexBuilder.AppendLine();
+                        latexBuilder.Append(slices[i].Slice.ToString());
+                    }
+                }
+                System.Diagnostics.Debug.WriteLine($"LaTeX content: {latexBuilder}");
+#endif
 
                 renderer.Push(paragraph);
                 renderer.WriteLeafRawLines(obj);

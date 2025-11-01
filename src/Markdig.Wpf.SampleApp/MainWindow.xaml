@@ -24,6 +24,10 @@
          Content="Load LaTeX Test" 
         Click="LoadLatexTestButton_OnClick" 
               Margin="5" Padding="10,5"/>
+      <Button x:Name="LoadTaylorButton" 
+        Content="Taylor Formula" 
+     Click="LoadTaylorButton_OnClick" 
+    Margin="5" Padding="10,5"/>
       <Button x:Name="LoadReadmeButton" 
          Content="Load README" 
         Click="LoadReadmeButton_OnClick" 

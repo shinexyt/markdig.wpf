@@ -48,6 +48,11 @@ namespace Markdig.Wpf.SampleApp
             LoadDocument("Documents/LaTeX-Syntax-Test.md");
         }
 
+        private void LoadTaylorButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            LoadDocument("Documents/Taylor-Formula-Correct.md");
+        }
+
         private void LoadReadmeButton_OnClick(object sender, RoutedEventArgs e)
         {
             LoadDocument("Documents/Markdig-readme.md");

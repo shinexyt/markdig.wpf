@@ -25,6 +25,12 @@ namespace Markdig.Renderers.Wpf.Inlines
             try
             {
                 var latex = obj.Content.ToString();
+                
+                // Skip empty formulas
+                if (string.IsNullOrWhiteSpace(latex))
+                {
+                    return;
+                }
 
                 var control = new WpfMath.Controls.FormulaControl
                 {
@@ -35,12 +41,22 @@ namespace Markdig.Renderers.Wpf.Inlines
 
                 renderer.WriteInline(new InlineUIContainer(control));
             }
-            catch
+            catch (Exception ex)
             {
                 // Fallback to text rendering if LaTeX parsing fails
-                var run = new Run($"${obj.Content.ToString()}$")
+                // Show the error in a more informative way during development
+                var errorText = $"${obj.Content.ToString()}$";
+                
+#if DEBUG
+                // In debug mode, show the actual error
+                System.Diagnostics.Debug.WriteLine($"Math rendering error: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"LaTeX content: {obj.Content.ToString()}");
+#endif
+
+                var run = new Run(errorText)
                 {
-                    Foreground = Brushes.DarkRed
+                    Foreground = Brushes.DarkRed,
+                    ToolTip = $"Math rendering error: {ex.Message}"
                 };
                 run.SetResourceReference(FrameworkContentElement.StyleProperty, Styles.CodeStyleKey);
                 renderer.WriteInline(run);
