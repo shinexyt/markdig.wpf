@@ -26,7 +26,24 @@ namespace Markdig.Wpf
                 .UsePipeTables()
                 .UseTaskLists()
                 .UseAutoLinks()
-                .UseMathematics();
+                .UseMathematics()
+                .UseLatexMathematics();
+        }
+
+        /// <summary>
+        /// Adds support for LaTeX-style math delimiters: \(...\) for inline math and \[...\] for block math.
+        /// This adds a secondary math parser that works in parallel with the standard $ and $$ delimiters.
+        /// </summary>
+        /// <param name="pipeline">The pipeline.</param>
+        /// <returns>The modified pipeline</returns>
+        public static MarkdownPipelineBuilder UseLatexMathematics(this MarkdownPipelineBuilder pipeline)
+        {
+            if (pipeline == null) throw new ArgumentNullException(nameof(pipeline));
+
+            // Register a math parser instance with LaTeX-style delimiters
+            pipeline.Extensions.AddIfNotAlready(new Extensions.LatexMathExtension());
+
+            return pipeline;
         }
     }
 }

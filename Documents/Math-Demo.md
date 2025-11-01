@@ -10,13 +10,33 @@ This implementation uses [WPF-Math](https://github.com/ForNeVeR/wpf-math) librar
 - ✅ **.NET Framework 4.6.2+** 
 - ✅ **.NET 8.0**
 
+## Supported Math Delimiters
+
+Markdig.Wpf now supports **both Markdown-style and LaTeX-style** math delimiters:
+
+### Markdown Style (Standard)
+- **Inline math**: `$...$`
+- **Block math**: `$$...$$`
+
+### LaTeX Style (New!)
+- **Inline math**: `\(...\)`
+- **Block math**: `\[...\]`
+
+Both syntaxes work identically and can be mixed in the same document.
+
 ## Inline Math
 
+### Using Markdown syntax
 You can use inline math expressions like this: $E = mc^2$ or $\pi \approx 3.14159$.
+
+### Using LaTeX syntax
+You can also use LaTeX-style delimiters: \(E = mc^2\) or \(\pi \approx 3.14159\).
 
 Here's another example with inline math: The quadratic formula is $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$.
 
 ## Block Math
+
+### Using Markdown syntax ($$...$$)
 
 Block math expressions are displayed on their own lines:
 
@@ -30,11 +50,19 @@ $$
 e^{i\pi} + 1 = 0
 $$
 
+### Using LaTeX syntax (\[...\])
+
+You can also use LaTeX-style block delimiters:
+
+\(
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+\)
+
 The Pythagorean theorem:
 
-$$
+\(
 a^2 + b^2 = c^2
-$$
+\)
 
 ## More Complex Examples
 
@@ -76,6 +104,7 @@ The math rendering is implemented using:
 - **WpfMath.Controls.FormulaControl** for direct visual rendering
 - **Error handling** to gracefully handle invalid LaTeX expressions
 - **Configurable scaling** for inline (20.0) and block (25.0) math displays
+- **Dual delimiter support** via custom LaTeX parser extension
 
 ### Technical Notes
 
@@ -84,3 +113,8 @@ The math rendering is implemented using:
 3. **Fallback**: Invalid expressions render as styled text with error indication
 4. **Performance**: Math expressions are rendered on-demand during document processing
 5. **Cross-Framework**: Works identically on .NET Framework 4.6.2 and .NET 8.0
+6. **Delimiter Support**: Both `$` and `\(` for inline, `$$` and `\[` for block math
+
+## More Examples
+
+For a comprehensive example using LaTeX-style delimiters throughout, see [LaTeX-Syntax-Test.md](LaTeX-Syntax-Test.md).

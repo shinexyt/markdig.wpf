@@ -49,6 +49,9 @@
     </Content>
     <Content Include="..\..\Documents\Math-Demo.md" Link="Documents\Math-Demo.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-</Content>
+    </Content>
+    <Content Include="..\..\Documents\LaTeX-Syntax-Test.md" Link="Documents\LaTeX-Syntax-Test.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>

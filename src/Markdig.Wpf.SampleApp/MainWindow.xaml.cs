@@ -43,6 +43,11 @@ namespace Markdig.Wpf.SampleApp
             LoadDocument("Documents/Math-Demo.md");
         }
 
+        private void LoadLatexTestButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            LoadDocument("Documents/LaTeX-Syntax-Test.md");
+        }
+
         private void LoadReadmeButton_OnClick(object sender, RoutedEventArgs e)
         {
             LoadDocument("Documents/Markdig-readme.md");

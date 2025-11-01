@@ -2,7 +2,7 @@
 
 > **Note:** This repository is forked from [Kryptos-FR/markdig-wpf](https://github.com/Kryptos-FR/markdig-wpf)
 > 
-> **Key Enhancement:** This fork adds **Mathematics/LaTeX support** with visual rendering powered by WPF-Math, enabling inline (`$...$`) and block (`$$...$$`) mathematical expressions in your WPF applications. See [Math-Demo.md](Documents/Math-Demo.md) for more examples and demonstrations.
+> **Key Enhancement:** This fork adds **Mathematics/LaTeX support** with visual rendering powered by WPF-Math, supporting both Markdown-style (`$...$`, `$$...$$`) and LaTeX-style (`\(...\)`, `\[...\]`) delimiters for mathematical expressions in your WPF applications. See [Math-Demo.md](Documents/Math-Demo.md) and [LaTeX-Syntax-Test.md](Documents/LaTeX-Syntax-Test.md) for examples and demonstrations.
 
 A WPF library for [xoofx/markdig](https://github.com/xoofx/markdig)
 
@@ -26,4 +26,32 @@ Additionally, the following extensions are supported:
 - **Task lists** (WPF renderer only)
 - **Tables** (partial support of grid and pipe tables) (WPF renderer only)
 - **Extra emphasis**
-- **Mathematics/LaTeX** (inline `$...$` and block `$$...$$` expressions with WPF-Math visual rendering)
+- **Mathematics/LaTeX** with dual delimiter support:
+  - **Markdown style**: `$...$` (inline) and `$$...$$` (block)
+  - **LaTeX style**: `\(...\)` (inline) and `\[...\]` (block)
+  - Powered by WPF-Math for professional mathematical typesetting
+  - Both syntaxes can be mixed in the same document
+
+## Math/LaTeX Examples
+
+### Markdown Style
+```markdown
+Inline: The famous equation is $E = mc^2$.
+
+Block:
+$$
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+$$
+```
+
+### LaTeX Style
+```markdown
+Inline: The famous equation is \(E = mc^2\).
+
+Block:
+\[
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+\]
+```
+
+Both render identically with professional mathematical typesetting!
