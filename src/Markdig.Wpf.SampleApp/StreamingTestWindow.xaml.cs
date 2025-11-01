@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,15 +11,31 @@ using Markdig;
 
 namespace Markdig.Wpf.SampleApp
 {
-    public partial class StreamingTestWindow : Window
+    public partial class StreamingTestWindow : Window, INotifyPropertyChanged
     {
         private MarkdownPipeline _pipeline;
         private CancellationTokenSource _cancellationTokenSource;
         private Stopwatch _stopwatch;
         private bool _isStreaming;
+        private string _content;
 
-      // 测试内容 - 包含中文和LaTeX数学表达式
-      private const string TEST_CONTENT = @"# 泰勒公式（Taylor Formula）测试
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public string Content1
+        {
+            get => _content;
+            set
+            {
+                if (_content != value)
+                {
+                    _content = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        // 测试内容 - 包含中文和LaTeX数学表达式
+        private const string TEST_CONTENT = @"# 泰勒公式（Taylor Formula）测试
 
 泰勒公式是数学中一种关键的方法，用于将一个函数在某点附近以级数形式展开。它广泛应用于数学分析、数值计算以及物理等领域。
 
@@ -152,153 +170,257 @@ f(x, y) = f(a, b) + \frac{\partial f}{\partial x}(a,b)(x-a) + \frac{\partial f}{
 ";
 
         public StreamingTestWindow()
-{
+        {
             InitializeComponent();
-       InitializePipeline();
-       SetupEventHandlers();
+            InitializePipeline();
+            SetupEventHandlers();
+            DataContext = this;
+            
+            // Set initial content to show the viewer is working
+            Content1 = "# 欢迎使用流式传输测试\n\n点击 **Start Streaming** 按钮开始测试流式渲染 LaTeX 公式。\n\n" +
+                "你可以调整：\n" +
+               "- **Speed**: 控制字符流式传输的速度\n" +
+                         "- **Update Delay**: 控制文档更新的防抖延迟（推荐 100-200ms）";
         }
 
         private void InitializePipeline()
         {
- _pipeline = new MarkdownPipelineBuilder()
-          .UseSupportedExtensions()
-    .Build();
-            DataContext = new { Pipeline = _pipeline };
+            _pipeline = new MarkdownPipelineBuilder()
+                     .UseSupportedExtensions()
+               .Build();
         }
 
         private void SetupEventHandlers()
         {
-        SpeedSlider.ValueChanged += (s, e) =>
-        {
-     SpeedLabel.Text = $"{(int)SpeedSlider.Value} ms";
+            SpeedSlider.ValueChanged += (s, e) =>
+            {
+                SpeedLabel.Text = $"{(int)SpeedSlider.Value} ms";
+            };
+
+            UpdateDelaySlider.ValueChanged += (s, e) =>
+            {
+                UpdateDelayLabel.Text = $"{(int)UpdateDelaySlider.Value} ms";
             };
         }
 
         private async void StartStreaming_Click(object sender, RoutedEventArgs e)
         {
-     await StartStreaming((int)SpeedSlider.Value);
+            await StartStreaming((int)SpeedSlider.Value);
         }
 
-    private async void FastStreaming_Click(object sender, RoutedEventArgs e)
-   {
-   SpeedSlider.Value = 10;
-  await StartStreaming(10);
-        }
-
- private async void SlowStreaming_Click(object sender, RoutedEventArgs e)
+        private async void FastStreaming_Click(object sender, RoutedEventArgs e)
         {
-         SpeedSlider.Value = 200;
-         await StartStreaming(200);
+            SpeedSlider.Value = 10;
+            await StartStreaming(10);
+        }
+
+        private async void SlowStreaming_Click(object sender, RoutedEventArgs e)
+        {
+            SpeedSlider.Value = 200;
+            await StartStreaming(200);
+        }
+
+        private async void ExtremeLagTest_Click(object sender, RoutedEventArgs e)
+        {
+            // Extreme lag test: 1ms per character with UpdateDelay=0
+      // This simulates your real app's high-frequency updates
+         SpeedSlider.Value = 10;
+UpdateDelaySlider.Value = 0;
+    
+        var result = MessageBox.Show(
+        "⚠️ 极速卡顿测试 ⚠️\n\n" +
+                "此测试将以极快速度（1ms/字符）流式传输，且不使用防抖（UpdateDelay=0）。\n" +
+                "这会导致每秒约1000次文档重新解析，模拟你的应用卡顿场景。\n\n" +
+                "预期效果：\n" +
+                "- UI 会明显卡顿/冻结\n" +
+       "- CPU 占用极高\n" +
+       "- 进度条可能停止更新\n\n" +
+       "建议：测试后将 UpdateDelay 改为 100-200 对比效果。\n\n" +
+     "是否继续？",
+         "极速卡顿测试",
+      MessageBoxButton.YesNo,
+ MessageBoxImage.Warning);
+            
+         if (result == MessageBoxResult.Yes)
+            {
+    await StartStreaming(1); // 1ms per character - EXTREME!
+  }
         }
 
         private async Task StartStreaming(int delayMs)
-  {
+        {
             if (_isStreaming)
-         {
-     MessageBox.Show("流式传输正在进行中...", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
-       return;
-       }
+            {
+                MessageBox.Show("流式传输正在进行中...", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
 
-   try
-  {
-            _isStreaming = true;
-           StartStreamingButton.IsEnabled = false;
-      StopStreamingButton.IsEnabled = true;
-    SpeedSlider.IsEnabled = false;
+            try
+            {
+                _isStreaming = true;
+                StartStreamingButton.IsEnabled = false;
+                StopStreamingButton.IsEnabled = true;
+                SpeedSlider.IsEnabled = false;
+                UpdateDelaySlider.IsEnabled = false;
 
-    _cancellationTokenSource = new CancellationTokenSource();
-    _stopwatch = Stopwatch.StartNew();
+                // Clear existing content before starting
+                Content1 = string.Empty;
 
-                StatusLabel.Text = "? 正在流式传输...";
-        StatusLabel.Foreground = System.Windows.Media.Brushes.Orange;
+                _cancellationTokenSource = new CancellationTokenSource();
+                _stopwatch = Stopwatch.StartNew();
 
-    await StreamContent(TEST_CONTENT, delayMs, _cancellationTokenSource.Token);
+                StatusLabel.Text = "⏳ 正在流式传输...";
+                StatusLabel.Foreground = System.Windows.Media.Brushes.Orange;
 
-      if (!_cancellationTokenSource.Token.IsCancellationRequested)
-     {
-        StatusLabel.Text = "? 传输完成";
+                // Use extreme mode if delay is 1ms
+                if (delayMs == 1)
+ {
+          await StreamContentExtreme(TEST_CONTENT, _cancellationTokenSource.Token);
+      }
+      else
+      {
+          await StreamContent(TEST_CONTENT, delayMs, _cancellationTokenSource.Token);
+      }
+
+       if (!_cancellationTokenSource.Token.IsCancellationRequested)
+{
+           StatusLabel.Text = "✓ 传输完成";
          StatusLabel.Foreground = System.Windows.Media.Brushes.Green;
-       MessageBox.Show($"流式传输完成！\n\n" +
-               $"总字符数: {TEST_CONTENT.Length}\n" +
-    $"耗时: {_stopwatch.Elapsed.TotalSeconds:F2} 秒\n" +
-  $"平均速度: {TEST_CONTENT.Length / _stopwatch.Elapsed.TotalSeconds:F0} 字符/秒",
-  "完成",
-  MessageBoxButton.OK,
-  MessageBoxImage.Information);
+        MessageBox.Show($"流式传输完成！\n\n" +
+          $"总字符数: {TEST_CONTENT.Length}\n" +
+           $"耗时: {_stopwatch.Elapsed.TotalSeconds:F2} 秒\n" +
+   $"平均速度: {TEST_CONTENT.Length / _stopwatch.Elapsed.TotalSeconds:F0} 字符/秒",
+          "完成",
+    MessageBoxButton.OK,
+        MessageBoxImage.Information);
        }
-}
-     catch (Exception ex)
-            {
-    StatusLabel.Text = "? 发生错误";
-                StatusLabel.Foreground = System.Windows.Media.Brushes.Red;
-                MessageBox.Show($"发生错误:\n{ex.Message}\n\n{ex.StackTrace}",
+   }
+            catch (Exception ex)
+{
+ StatusLabel.Text = "✗ 发生错误";
+ StatusLabel.Foreground = System.Windows.Media.Brushes.Red;
+ MessageBox.Show($"发生错误:\n{ex.Message}\n\n{ex.StackTrace}",
           "错误",
-       MessageBoxButton.OK,
-           MessageBoxImage.Error);
-      }
-            finally
-            {
-             _isStreaming = false;
-     StartStreamingButton.IsEnabled = true;
-     StopStreamingButton.IsEnabled = false;
-          SpeedSlider.IsEnabled = true;
+     MessageBoxButton.OK,
+        MessageBoxImage.Error);
+       }
+        finally
+        {
+      _isStreaming = false;
+         StartStreamingButton.IsEnabled = true;
+        StopStreamingButton.IsEnabled = false;
+        SpeedSlider.IsEnabled = true;
+       UpdateDelaySlider.IsEnabled = true;
       _stopwatch?.Stop();
-      }
+  }
         }
 
-        private async Task StreamContent(string content, int delayMs, CancellationToken cancellationToken)
-        {
-      var sb = new StringBuilder();
-       var totalLength = content.Length;
-
-for (int i = 0; i < content.Length; i++)
+        /// <summary>
+   /// Extreme streaming mode: no delay, triggers maximum re-parsing frequency
+        /// This simulates the worst-case scenario that causes UI freezing
+        /// </summary>
+        private async Task StreamContentExtreme(string content, CancellationToken cancellationToken)
   {
-          if (cancellationToken.IsCancellationRequested)
-             {
-             StatusLabel.Text = "? 已停止";
-      StatusLabel.Foreground = System.Windows.Media.Brushes.Gray;
-      break;
-     }
+      var sb = new StringBuilder();
+      var totalLength = content.Length;
+  int updateCount = 0;
 
-          sb.Append(content[i]);
+       StatusLabel.Text = "⚡ 极速模式：无延迟高频更新";
 
- // 每次添加字符后更新UI（这会触发LaTeX解析，包括不完整的表达式）
-            MarkdownViewer.Markdown = sb.ToString();
+    for (int i = 0; i < content.Length; i++)
+      {
+     if (cancellationToken.IsCancellationRequested)
+   {
+           StatusLabel.Text = "⏸ 已停止";
+  StatusLabel.Foreground = System.Windows.Media.Brushes.Gray;
+    break;
+ }
 
-             // 更新统计信息
+sb.Append(content[i]);
+
+   // Update UI with every single character - NO DELAY!
+    // This causes maximum re-parsing frequency
+      Content1 = sb.ToString();
+     updateCount++;
+
+  // Update stats every 100 characters to avoid slowing down the test itself
+         if (i % 100 == 0 || i == content.Length - 1)
+        {
        var progress = (i + 1) * 100.0 / totalLength;
-        ProgressBar.Value = progress;
-            ProgressLabel.Text = $"{progress:F1}%";
-    CharCountLabel.Text = $"{i + 1} / {totalLength}";
-      TimeElapsedLabel.Text = $"{_stopwatch.Elapsed.TotalSeconds:F1} 秒";
+         ProgressBar.Value = progress;
+       ProgressLabel.Text = $"{progress:F1}%";
+           CharCountLabel.Text = $"{i + 1} / {totalLength}";
+         TimeElapsedLabel.Text = $"{_stopwatch.Elapsed.TotalSeconds:F1} 秒";
+     StatusLabel.Text = $"⚡ 极速模式：{updateCount} 次更新";
 
-// 自动滚动到底部
-          ScrollViewer.ScrollToEnd();
+      // Allow UI to update occasionally
+      if (i % 50 == 0)
+    {
+await Task.Delay(1, cancellationToken);
+}
+}
+  }
 
-      // 模拟网络延迟
-         await Task.Delay(delayMs, cancellationToken);
+       ScrollViewer.ScrollToEnd();
+  }
+
+    private async Task StreamContent(string content, int delayMs, CancellationToken cancellationToken)
+        {
+            var sb = new StringBuilder();
+            var totalLength = content.Length;
+
+            for (int i = 0; i < content.Length; i++)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    StatusLabel.Text = "⏸ 已停止";
+                    StatusLabel.Foreground = System.Windows.Media.Brushes.Gray;
+                    break;
+                }
+
+                sb.Append(content[i]);
+
+                // Update UI with accumulated content
+                Content1 = sb.ToString();
+                // 更新统计信息
+                var progress = (i + 1) * 100.0 / totalLength;
+                ProgressBar.Value = progress;
+                ProgressLabel.Text = $"{progress:F1}%";
+                CharCountLabel.Text = $"{i + 1} / {totalLength}";
+                TimeElapsedLabel.Text = $"{_stopwatch.Elapsed.TotalSeconds:F1} 秒";
+
+                // 自动滚动到底部
+                ScrollViewer.ScrollToEnd();
+
+                // 模拟网络延迟
+                await Task.Delay(delayMs, cancellationToken);
             }
-      }
+        }
 
         private void StopStreaming_Click(object sender, RoutedEventArgs e)
-  {
-     _cancellationTokenSource?.Cancel();
-    }
+        {
+            _cancellationTokenSource?.Cancel();
+        }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
- {
-       if (_isStreaming)
+        {
+            if (_isStreaming)
             {
                 MessageBox.Show("请先停止流式传输", "提示", MessageBoxButton.OK, MessageBoxImage.Warning);
-      return;
-      }
+                return;
+            }
 
-          MarkdownViewer.Markdown = string.Empty;
-       ProgressBar.Value = 0;
- ProgressLabel.Text = "0%";
-         CharCountLabel.Text = "0";
-          TimeElapsedLabel.Text = "0 秒";
-    StatusLabel.Text = string.Empty;
+            Content1 = string.Empty;
+            ProgressBar.Value = 0;
+            ProgressLabel.Text = "0%";
+            CharCountLabel.Text = "0";
+            TimeElapsedLabel.Text = "0 秒";
+            StatusLabel.Text = string.Empty;
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

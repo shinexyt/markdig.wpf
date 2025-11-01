@@ -37,7 +37,6 @@
     <ProjectReference Include="..\Markdig.Wpf\Markdig.Wpf.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Documents\" />
     <Folder Include="img\" />
   </ItemGroup>
   <ItemGroup>

@@ -51,7 +51,7 @@
       <LineBreak/>
   <Run Text="Test content includes Chinese text and multiple LaTeX formulas using \(...\) and \[...\] syntax."/>
       <LineBreak/>
-            <Run Text="After the fix, the application should not freeze and handle incomplete LaTeX gracefully."/>
+            <Run Text="Use UpdateDelay to debounce rapid updates and prevent UI freezing during streaming."/>
     </TextBlock>
         
         <!-- Control Panel -->
@@ -68,26 +68,45 @@
        <Button Content="Clear" Click="Clear_Click"/>
          <Button Content="Fast" Click="FastStreaming_Click"/>
             <Button Content="Slow" Click="SlowStreaming_Click"/>
-      
-            <TextBlock VerticalAlignment="Center" Margin="15,0,5,0" Text="Speed:"/>
-         <Slider x:Name="SpeedSlider" 
+        <Button Content="? EXTREME (Lag Test)" 
+         Click="ExtremeLagTest_Click"
+      Background="#FF6600"
+                    FontWeight="Bold"/>
+     
+  <TextBlock VerticalAlignment="Center" Margin="15,0,5,0" Text="Speed:"/>
+      <Slider x:Name="SpeedSlider" 
          Width="150" 
 Minimum="10" 
          Maximum="500" 
     Value="50" 
           TickFrequency="50" 
-        IsSnapToTickEnabled="True"
+      IsSnapToTickEnabled="True"
      VerticalAlignment="Center"/>
-            <TextBlock x:Name="SpeedLabel" 
+      <TextBlock x:Name="SpeedLabel" 
      VerticalAlignment="Center" 
-            Margin="5,0,0,0" 
+      Margin="5,0,0,0" 
        Text="50 ms"
     MinWidth="60"/>
           
-      <TextBlock x:Name="StatusLabel" 
+  <TextBlock VerticalAlignment="Center" Margin="15,0,5,0" Text="Update Delay:"/>
+ <Slider x:Name="UpdateDelaySlider" 
+    Width="150" 
+   Minimum="0" 
+      Maximum="500" 
+            Value="100" 
+          TickFrequency="50" 
+     IsSnapToTickEnabled="True"
+  VerticalAlignment="Center"/>
+          <TextBlock x:Name="UpdateDelayLabel" 
+   VerticalAlignment="Center" 
+Margin="5,0,0,0" 
+           Text="100 ms"
+   MinWidth="60"/>
+   
+            <TextBlock x:Name="StatusLabel" 
      VerticalAlignment="Center" 
   Margin="20,0,0,0" 
-        FontWeight="Bold"
+     FontWeight="Bold"
      Foreground="#4CAF50"/>
         </StackPanel>
         
@@ -101,7 +120,8 @@ Minimum="10"
         VerticalScrollBarVisibility="Auto"
    Padding="15">
         <markdig:MarkdownViewer x:Name="MarkdownViewer" 
-            Pipeline="{Binding Pipeline}"/>
+           Markdown="{Binding Content1}"
+             UpdateDelay="{Binding ElementName=UpdateDelaySlider, Path=Value}"/>
 </ScrollViewer>
         </Border>
         
